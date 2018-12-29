@@ -34,6 +34,8 @@
     "popmotion": "^8.5.5",
     "react": "^16.7.0-alpha.2",
     "react-calendar-heatmap": "^1.8.0",
+    "react-dnd": "^7.0.2",
+    "react-dnd-html5-backend": "^7.0.2",
     "react-dom": "^16.7.0-alpha.2",
     "react-hot-loader": "^4.6.3",
     "react-pose": "^4.0.4",
