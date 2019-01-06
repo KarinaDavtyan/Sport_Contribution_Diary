@@ -12,25 +12,27 @@ const tag = css({
 });
 
 const tagSource = {
-  beginDrag() {
-    return {};
+  beginDrag(props) {
+    const item = { id: props.tag };
+    return item;
   }
 };
 
 function collect(connect, monitor) {
   return {
     connectDragSource: connect.dragSource(),
-    isDragging: monitor.isDragging()
+    isDragging: monitor.isDragging(),
+    getItem: monitor.getItem()
   };
 }
 
-const Tag = ({ connectDragSource }) => {
+const Tag = ({ connectDragSource, ...props } ) => {
   return connectDragSource(
     <div>
       <div
         css={tag}
       >
-        #bouldering
+        {props.tag}
       </div>
     </div>
   );

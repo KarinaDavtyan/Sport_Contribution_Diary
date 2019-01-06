@@ -30,6 +30,7 @@
   "dependencies": {
     "@emotion/core": "^10.0.5",
     "@emotion/styled": "^10.0.5",
+    "calendar-heatmap-graph": "0.0.14",
     "moment": "^2.23.0",
     "popmotion": "^8.5.5",
     "react": "^16.7.0-alpha.2",
@@ -39,6 +40,8 @@
     "react-dom": "^16.7.0-alpha.2",
     "react-hot-loader": "^4.6.3",
     "react-pose": "^4.0.4",
-    "react-router-dom": "^4.3.1"
+    "react-redux": "^6.0.0",
+    "react-router-dom": "^4.3.1",
+    "redux": "^4.0.1"
   }
 }

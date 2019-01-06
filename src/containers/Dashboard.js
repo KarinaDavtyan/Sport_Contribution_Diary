@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useReducer } from 'react';
 import { css } from '@emotion/core';
 import posed from 'react-pose';
-import { spring } from 'popmotion';
 import CalendarHeatmap from 'react-calendar-heatmap';
 import 'react-calendar-heatmap/dist/styles.css';
 import moment from 'moment';
@@ -19,23 +18,8 @@ const container = css({
   display: 'flex',
   padding: 0,
   height: '100vh',
-  flexDirection: 'column',
-});
-
-const image = css({
-  height: '5vh',
-  width: '5vh',
-  display: 'block',
-  zIndex: 2
-});
-
-const header = css({
   width: '100vw',
-  height: '3vh',
-  background: 'hotpink',
-  display: 'flex',
-  paddingTop: 0,
-  justifyContent: 'center'
+  flexDirection: 'column',
 });
 
 const container_week = css({
@@ -50,76 +34,99 @@ const container_week = css({
 const container_day = css({
   display: 'flex',
   flexDirection: 'column',
-  // justifyContent: 'center'
 });
 
 const day_name = css({
   color: 'white',
   fontFamily: 'Staatliches',
   fontSize: '1.5em'
-})
-
-const container_tags = css({
-  // background: 'rgb(243, 243, 243)',
-  width: '100vw',
-  height: '25vh',
-  padding: '0 5vw 0 5vw'
 });
 
-const heatmap = css({
+const container_tags = css({
+  display: 'flex',
+  justifyContent: 'space-evenly',
+  height: '25vh',
+});
+
+const container_heatmap = css({
   width: '90vw',
   padding: '5vh'
 });
 
-const Ball = posed.img({
-  draggable: 'y',
-  dragBounds: { top: 0, bottom: 50 },
-  dragEnd: { transition: spring }
+const DayName = posed.div({
+  hoverable: true,
+  init: {
+    scale: 1,
+  },
+  hover: {
+    scale: 1.2,
+  }
 });
 
+
 const Dashboard = () => {
+  const [state, setState] = useReducer(
+    (state, newState) => ({ ...state, ...newState }),
+    {
+      activity: [
+        { date: '2019-01-01', count: 1 },
+        { date: '2019-01-22', count: 3 },
+        { date: '2019-01-30', count: 5 },
+        { date: '2019-04-30', count: 6 },
+      ],
+      tags: [
+        'bouldering', 'yoga', 'sport_climbing_🧗‍♀️', 'gym💪'
+      ],
+      events: [[], [], [], [], [], [], []]
+    }
+  );
+
+  function handleDrop (index, item) {
+    const newEvents = state.events.slice();
+    newEvents[index] = [ ...newEvents[index], item.id];
+    setState({
+      ...state,
+      events: newEvents
+    });
+  }
+
   return (
     <DragDropContextProvider backend={HTML5Backend}>
       <div
         css={container}
       >
         <div
-          css={header}
-        >
-          
-          <Ball
-            css={image}
-            src={require('../assets/soccer-ball-96.png')} />
-        </div>
-        <div
           css={container_week}
         >
-          {week.map(day => (
-            <div
-              key={day}
-              css={container_day}
-            >
-              <div
-                css={day_name}
+          {week.map((day, index )=> {
+            const events = state.events.length > 0 
+              ? state.events[index] : null;
+            return (
+              <DayName
+                key={day}
+                css={container_day}
               >
-                {day.substring(0, 3)}
-              </div>
-              <Day />
-            </div>)
+                <div
+                  css={day_name}
+                >
+                  {day.substring(0, 3)}
+                </div>
+                <Day
+                  onDrop={item => handleDrop(index, item)}
+                  events={events}
+                />
+              </DayName>
+            );
+          }
           )}
         </div>
         <div
-          css={heatmap}
+          css={container_heatmap}
         >
           <CalendarHeatmap
-            startDate={moment().startOf('year').subtract(2, 'days').format()}
-            endDate={moment().format()}
-            values={[
-              { date: '2018-01-01', count: 1 },
-              { date: '2018-01-22', count: 3  },
-              { date: '2018-01-30', count: 5 },
-              { date: '2018-04-30', count: 6 },
-            ]}
+            startDate={moment().startOf('year')}
+            endDate={moment().endOf('year')}
+            values={state.activity}
             classForValue={(value) => {
               if (!value) {
                 return 'color-empty';
@@ -134,12 +141,18 @@ const Dashboard = () => {
         <div
           css={container_tags}
         >
-          <Tag />
+          {
+            state.tags.map(tag => (
+              <Tag
+                key={tag}
+                tag={`#${tag}`}
+              />
+            ))
+          }
         </div>
       </div>
     </DragDropContextProvider>
   );
 };
 
-// export default DragDropContext(HTML5Backend)(Dashboard);
-export default Dashboard;
+export default DragDropContext(HTML5Backend)(Dashboard);
