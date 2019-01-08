@@ -50,7 +50,8 @@ const container_tags = css({
 
 const container_heatmap = css({
   width: '90vw',
-  padding: '5vh'
+  padding: '5vh',
+  alignSelf: 'center'
 });
 
 const DayName = posed.div({
@@ -68,12 +69,7 @@ const Dashboard = () => {
   const [state, setState] = useReducer(
     (state, newState) => ({ ...state, ...newState }),
     {
-      activity: [
-        { date: '2019-01-01', count: 1 },
-        { date: '2019-01-22', count: 3 },
-        { date: '2019-01-30', count: 5 },
-        { date: '2019-04-30', count: 6 },
-      ],
+      activity: [],
       tags: [
         'bouldering', 'yoga', 'sport_climbing_🧗‍♀️', 'gym💪'
       ],
@@ -82,12 +78,26 @@ const Dashboard = () => {
   );
 
   function handleDrop (index, item) {
+    const date = moment().day(index + 1).format('L');
+    const newActivity = state.activity.slice();
+    if (newActivity.length > 0) {
+      const existDate = newActivity.find(activity => activity.date == date);
+      if (existDate) {
+        newActivity[existDate.date] = existDate.count++;
+      } else {
+        newActivity.push({ date, count: 1 });
+      }
+    } else {
+      newActivity.push({ date, count: 1 });
+    }
     const newEvents = state.events.slice();
     newEvents[index] = [ ...newEvents[index], item.id];
     setState({
       ...state,
+      activity: newActivity,
       events: newEvents
     });
+
   }
 
   return (
@@ -124,14 +134,14 @@ const Dashboard = () => {
           css={container_heatmap}
         >
           <CalendarHeatmap
-            startDate={moment().startOf('year')}
-            endDate={moment().endOf('year')}
+            startDate={moment().subtract(1, 'years')}
+            endDate={moment().day(7).format()}
             values={state.activity}
             classForValue={(value) => {
               if (!value) {
                 return 'color-empty';
               }
-              return value.count < 2 
+              return value.count < 2   
                 ? 'color-scale-1'
                 : value.count < 4 ? 'color-scale-2'
                   : value.count < 6 ? 'color-scale-3' : 'color-scale-4';
