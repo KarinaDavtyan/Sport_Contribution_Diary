@@ -5,7 +5,7 @@ import CalendarHeatmap from 'react-calendar-heatmap';
 import 'react-calendar-heatmap/dist/styles.css';
 import moment from 'moment';
 import { DragDropContextProvider, DragDropContext } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 import Day from '../components/Day';
 import Tag from '../components/Tag';
@@ -77,7 +77,7 @@ const Dashboard = () => {
     }
   );
 
-  function handleDrop (index, item) {
+  function handleDrop(index, item) {
     const date = moment().day(index + 1).format('L');
     const newActivity = state.activity.slice();
     if (newActivity.length > 0) {
@@ -91,7 +91,7 @@ const Dashboard = () => {
       newActivity.push({ date, count: 1 });
     }
     const newEvents = state.events.slice();
-    newEvents[index] = [ ...newEvents[index], item.id];
+    newEvents[index] = [...newEvents[index], item.id];
     setState({
       ...state,
       activity: newActivity,
@@ -108,8 +108,8 @@ const Dashboard = () => {
         <div
           css={container_week}
         >
-          {week.map((day, index )=> {
-            const events = state.events.length > 0 
+          {week.map((day, index) => {
+            const events = state.events.length > 0
               ? state.events[index] : null;
             return (
               <DayName
@@ -141,13 +141,13 @@ const Dashboard = () => {
               if (!value) {
                 return 'color-empty';
               }
-              return value.count < 2   
+              return value.count < 2
                 ? 'color-scale-1'
                 : value.count < 4 ? 'color-scale-2'
                   : value.count < 6 ? 'color-scale-3' : 'color-scale-4';
             }}
           />
-        </div> 
+        </div>
         <div
           css={container_tags}
         >
