@@ -12,7 +12,6 @@ const box_day = css({
   fontFamily: 'Staatliches',
   fontSize: '1em',
   padding: '0.3vh',
-  overflowX: 'scroll'
 });
 
 
@@ -31,7 +30,7 @@ const boxTarget = {
   },
 };
 
-const Day = ({connectDropTarget, ...props}) => {
+const Day = ({ connectDropTarget, ...props }) => {
   return connectDropTarget(
     <div>
       <div

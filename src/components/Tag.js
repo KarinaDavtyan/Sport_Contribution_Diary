@@ -8,7 +8,8 @@ import { ItemTypes } from './Constants';
 const tag = css({
   color: 'hotpink',
   fontSize: '3em',
-  fontFamily: 'Staatliches'
+  fontFamily: 'Staatliches',
+  cursor: 'grab',
 });
 
 const tagSource = {
@@ -26,7 +27,7 @@ function collect(connect, monitor) {
   };
 }
 
-const Tag = ({ connectDragSource, ...props } ) => {
+const Tag = ({ connectDragSource, ...props }) => {
   return connectDragSource(
     <div>
       <div
