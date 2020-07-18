@@ -4,7 +4,7 @@ import posed from 'react-pose';
 import CalendarHeatmap from 'react-calendar-heatmap';
 import 'react-calendar-heatmap/dist/styles.css';
 import moment from 'moment';
-import { DragDropContextProvider, DragDropContext } from 'react-dnd';
+import { DndProvider, DragDropContext } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
 import Day from '../components/Day';
@@ -101,7 +101,7 @@ const Dashboard = () => {
   }
 
   return (
-    <DragDropContextProvider backend={HTML5Backend}>
+    <DndProvider backend={HTML5Backend}>
       <div
         css={container}
       >
@@ -161,8 +161,8 @@ const Dashboard = () => {
           }
         </div>
       </div>
-    </DragDropContextProvider>
+    </DndProvider>
   );
 };
 
-export default DragDropContext(HTML5Backend)(Dashboard);
+export default Dashboard;
