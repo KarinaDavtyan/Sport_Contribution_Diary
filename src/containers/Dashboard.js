@@ -3,7 +3,7 @@ import { css } from '@emotion/core';
 import posed from 'react-pose';
 import CalendarHeatmap from 'react-calendar-heatmap';
 import 'react-calendar-heatmap/dist/styles.css';
-import { startOfISOWeek, add } from 'date-fns';
+import { startOfISOWeek, add, sub } from 'date-fns';
 import { DndProvider, DragDropContext } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
@@ -78,13 +78,9 @@ const Dashboard = () => {
   );
 
   function handleDrop(index, item) {
-    console.log({ index });
-    // var day = set(new Date(), { days: index + 1 })
     const day = add(startOfISOWeek(new Date()), { days: index })
-    // var day = setDay(new Date(), index + 1, { weekStartsOn: 1 })
-    console.log({ day });
     const date = format(day, 'MM/dd/yyyy');
-    console.log({ date });
+
     const newActivity = state.activity.slice();
     if (newActivity.length > 0) {
       const existDate = newActivity.find(activity => activity.date == date);
